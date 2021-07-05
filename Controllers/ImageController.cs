@@ -1,5 +1,6 @@
-using Microsoft.AspNetCore.Hosting;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using ImageService.Models;
 
 namespace ImageService.Controllers
 {
@@ -7,15 +8,12 @@ namespace ImageService.Controllers
 	[Route("[controller]")]
 	public class ImageController : ControllerBase
 	{
-		readonly IWebHostEnvironment _env;
-		public ImageController(IWebHostEnvironment env)
+		readonly ApplicationContext _app;
+		public ImageController(ApplicationContext app) => _app = app;
+		[HttpGet("{id}")]
+		public async Task<ActionResult<Image>> GetAsync(int id)
 		{
-			_env = env;
-		}
-		[HttpGet]
-		public IActionResult Get()
-		{
-			return Content(_env.EnvironmentName);
+			return await _app.Images.FindAsync(id);
 		}
 	}
 }

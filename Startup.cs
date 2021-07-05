@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ImageService.Models;
 
 namespace ImageService
 {
@@ -10,6 +12,10 @@ namespace ImageService
 		public Startup(IConfiguration config) => _config = config;
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddDbContext<ApplicationContext>(options =>
+			{
+				options.UseSqlServer(_config.GetConnectionString("DefaultConnection"));
+			});
 			services.AddControllers();
 		}
 		public void Configure(IApplicationBuilder app)
